@@ -22,7 +22,8 @@ public class CPD {
 
     //Main function, where we check if an important event has occured
     //and we do something in that case
-    public void process(){
+    public void process(Double clock){
+        this.clock = clock;
         while (somethingToProcess()){
 
             //If an event in the processors has ended, we process that processor event
@@ -49,8 +50,6 @@ public class CPD {
                 }
             }*/
 
-            //Add the clock 0,000001
-            clock += 0.000001;
         }
 
         //Method called when there are no more events to be processed
@@ -141,6 +140,18 @@ public class CPD {
     //we tell Salida to finish the task
     private void finishProcesing(){
         salida.finishProcesing();
+    }
+
+    public void addEventToProcessors(Event event){
+        processors[getFreeProcessor()] = event;
+    }
+
+    public void addEventToQueue(Event event){
+        queue.put(event);
+    }
+
+    public boolean queueIsFull(){
+        return queue.isFull();
     }
 
 }
