@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FEL {
+public class Agregador {
 
     private List<Event> eventList;
 
-    public FEL() {
+    public Agregador() {
         eventList = new ArrayList<>();
+    }
+
+    public Agregador(List<Event> premiumList, List<Event> basicosList){
+        eventList = new ArrayList<>();
+        for (Event event: premiumList){ eventList.add(event);}
+        for (Event event: basicosList){ eventList.add(event);}
+        Collections.sort(eventList);
     }
 
     public void addEvent(Event event){
