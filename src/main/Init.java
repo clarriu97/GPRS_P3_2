@@ -28,19 +28,7 @@ public class Init {
             java.lang.System.out.println("Introduzca los datos de entrada");
             String frase = entrada.nextLine();
             String[] fraseDividida = frase.split(" ");
-            //Ayuda:
-            //"simula"
-            //ficheroLlegadasPremium.txt
-            //ficheroLlegadasBasicos.txt
-            //tiempoServicioBloque0
-            //maxColaBloque0
-            //numServidoresCPD1
-            //maxColaCPD1
-            //numServidoresCPD2
-            //maxColaCPD2
-            //parametroDeRetorno
-            //<instantesDeSalida.txt> opcional
-            ////instante de peticion, tipo de usuario, retornada, tiempo de servicio, CPD y rechazada
+
             if (fraseDividida[0].equals("simula") && (fraseDividida.length == 11 || fraseDividida.length == 10)){
                 List<Event> premiumEventList = new ArrayList<>();
                 List<Event> basicEventList = new ArrayList<>();
@@ -57,7 +45,7 @@ public class Init {
                 while (basicos.hasNextLine()){
                     String line = basicos.nextLine();
                     String[] lineSplit = line.split(" ");
-                    basicEventList.add(new Event(true, Double.parseDouble(lineSplit[0]), Double.parseDouble(lineSplit[1])));
+                    basicEventList.add(new Event(false, Double.parseDouble(lineSplit[0]), Double.parseDouble(lineSplit[1])));
                 }
                 try{
                     Double tiempoServicioBloque0 = Double.parseDouble(fraseDividida[3]);
@@ -74,10 +62,13 @@ public class Init {
                         system = new System(premiumEventList, basicEventList, tiempoServicioBloque0, maxColaBloque0, numServidoresCPD1,
                                 maxColaCPD1, numServidoresCPD2, maxColaCPD2, parametroDeRetorno, fraseDividida[10]);
                     }
-                    system.start();
+                    //system.start();
+                    //simula ficheroLlegadasPremium.txt ficheroLlegadasBasicos.txt 1 1 1 1 1 1 1
                 } catch (NumberFormatException e){
                     showError();
                 }
+                for (Event event: premiumEventList){event.print();}
+                for (Event event: basicEventList){event.print();}
             } else {
                 showError();
             }
