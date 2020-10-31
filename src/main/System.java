@@ -4,9 +4,11 @@ import java.util.List;
 
 public class System {
 
-    private String nombreArchivoSalida;
-    private Double paramRetorno;
     private Agregador agregador1, agregador2;
+    private Salida salida;
+    private CPD bloque1, bloque2, repartidorDeCarga;
+    private Double clock;
+    private Separador separador;
 
     public System(List<Event> premiumList, List<Event> basicList, Double tiempoServicioBloque0, int maxColaBloque0, int numServidoresCPD1,
                   int maxColaCPD1, int numServidoresCPD2, int maxColaCPD2, Double paramRetorno, String nombreArchivoSalida){
@@ -14,12 +16,20 @@ public class System {
         agregador1 = new Agregador(premiumList, basicList);
         agregador2 = new Agregador();
 
-        this.paramRetorno = paramRetorno;
-        this.nombreArchivoSalida = nombreArchivoSalida;
+        repartidorDeCarga = new CPD(1, maxColaBloque0, tiempoServicioBloque0);
+        bloque1 = new CPD(numServidoresCPD1, maxColaCPD1);
+        bloque2 = new CPD(numServidoresCPD2, maxColaCPD2);
+
+        separador = new Separador(paramRetorno);
+        salida = new Salida(nombreArchivoSalida);
+
+        clock = 0.000000;
     }
 
     public void start(){
 
+
+        clock += 0.000001;
     }
 
 }

@@ -6,9 +6,11 @@ import java.util.List;
 public class Salida {
 
     private List<Event> listaSalidas;
+    private String nombreArchivoSalida;
 
-    public Salida(){
+    public Salida(String nombreArchivoSalida){
         listaSalidas = new ArrayList<>();
+        this.nombreArchivoSalida = nombreArchivoSalida;
     }
 
     public void add(Event event){
@@ -16,6 +18,7 @@ public class Salida {
     }
 
     public void finishProcesing() {
+        //TODO: make the output file with the events info
         for (Event event: listaSalidas){
             int acepted = 0;
             if (!event.isAcepted()){ acepted = 1;}

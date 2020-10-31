@@ -7,7 +7,7 @@ public class CPD {
     private Event[] processors;
     private SyncQueue queue;
     private Salida salida;
-    private double clock;
+    private Double tiempoServicio;
 
     // Constructor
     public CPD(int numProcessors, int queueSize) {
@@ -16,14 +16,17 @@ public class CPD {
             processors[i] = null;
         }
         queue = new SyncQueue(queueSize);
-        salida = new Salida();
-        clock = 0.000000;
+        salida = new Salida("asdf");
+    }
+
+    public CPD(int numProcessors, int queueSize, Double tiempoServicio){
+        new CPD(numProcessors, queueSize);
+        this.tiempoServicio = tiempoServicio;
     }
 
     //Main function, where we check if an important event has occured
     //and we do something in that case
     public void process(Double clock){
-        this.clock = clock;
         while (somethingToProcess()){
 
             //If an event in the processors has ended, we process that processor event
@@ -39,7 +42,7 @@ public class CPD {
             //if there is a free processor, we process that queue event
             if (!queue.isEmpty()){
                 if (!processorsAreFull()){
-                    processQueueEvent();
+                    processQueueEvent(clock);
                 }
             }
 
@@ -85,7 +88,7 @@ public class CPD {
     //there is at least one empty space in the processors, so the only thing it does is
     //to get the event from the FIFO queue, set the new tiempoSalida and send if to
     //an empty space of the processors
-    private void processQueueEvent(){
+    private void processQueueEvent(Double clock){
         Event event = queue.get();
         event.setTiempoSalida(clock + event.getTiempoServicio());
         processors[getFreeProcessor()] = event;
