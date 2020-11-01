@@ -57,4 +57,6 @@ public class Event implements Comparable<Event> {
         this.tiempoSalida = tiempoSalida;
     }
 
+    public void setTiempoServicio(Double tiempoServicio){ this.tiempoServicio = tiempoServicio;}
+
 }

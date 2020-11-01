@@ -6,7 +6,6 @@ public class CPD {
 
     private Event[] processors;
     private SyncQueue queue;
-    private Salida salida;
     private Double tiempoServicio;
 
     // Constructor
@@ -16,47 +15,32 @@ public class CPD {
             processors[i] = null;
         }
         queue = new SyncQueue(queueSize);
-        salida = new Salida("asdf");
-    }
-
-    public CPD(int numProcessors, int queueSize, Double tiempoServicio){
-        new CPD(numProcessors, queueSize);
-        this.tiempoServicio = tiempoServicio;
     }
 
     //Main function, where we check if an important event has occured
     //and we do something in that case
-    public void process(Double clock){
-        while (somethingToProcess()){
+    public Event process(Double clock){
 
-            //If an event in the processors has ended, we process that processor event
-            for (int i = 0; i<processors.length; i++){
-                if (processors[i] != null){
-                    if (clock >= processors[i].getTiempoSalida()){
-                        processProcessorEvent(processors[i], i);
-                    }
+        Event event = null;
+
+        //If an event in the processors has ended, we process that processor event
+        for (int i = 0; i<processors.length; i++){
+            if (processors[i] != null){
+                if (clock >= processors[i].getTiempoSalida()){
+                    event = processProcessorEvent(processors[i], i);
                 }
             }
-
-            //If there is an event in the queue, we check if there is an empty space in the processors
-            //if there is a free processor, we process that queue event
-            if (!queue.isEmpty()){
-                if (!processorsAreFull()){
-                    processQueueEvent(clock);
-                }
-            }
-
-            //If there is an event to process in the FEL, we process it
-            /*if (!fel.isEmpty()){
-                if (clock >= fel.getInminentEvent(false).getTiempoLlegada()){
-                    processFELEvent(fel.getInminentEvent(true));
-                }
-            }*/
-
         }
 
-        //Method called when there are no more events to be processed
-        finishProcesing();
+        //If there is an event in the queue, we check if there is an empty space in the processors
+        //if there is a free processor, we process that queue event
+        if (!queue.isEmpty()){
+            if (!processorsAreFull()){
+                processQueueEvent(clock);
+            }
+        }
+
+        return event;
     }
 
     //Method for checking if there are any event to be processed in the hole system
@@ -65,22 +49,6 @@ public class CPD {
         if (!queue.isEmpty()){ return true;}
         if (!processorsAreEmpty()){ return true;}
         return false;
-    }
-
-    //Method to process an event which is in the FEL
-    //if there is space in the processors, we send the event to a processor
-    //if not, we check if there is space in the queue, if yes we send it to the queue
-    //finally, if there is not space in the processors or the queue, we mark the event
-    //as not acepted and we send it to Salida
-    private void processFELEvent(Event event){
-        if (!processorsAreFull()){
-            processors[getFreeProcessor()] = event;
-        } else if (!queue.isFull()){
-            queue.put(event);
-        } else {
-            event.setAcepted(false);
-            salida.add(event);
-        }
     }
 
     //Method to process an event which is in the queue
@@ -99,9 +67,9 @@ public class CPD {
     //we only call this method if we know that an event from the processors has ended and
     //we receive the position which will come up free, so we add that event to the Salida
     //and we set the position as null
-    private void processProcessorEvent(Event event, int freePos){
-        salida.add(event);
+    private Event processProcessorEvent(Event event, int freePos){
         processors[freePos] = null;
+        return event;
     }
 
     //Method to check if ALL processors are empty
@@ -137,12 +105,6 @@ public class CPD {
             }
         }
         return freeProcessor;
-    }
-
-    //Method called when there are no more events in the system
-    //we tell Salida to finish the task
-    private void finishProcesing(){
-        salida.finishProcesing();
     }
 
     public void addEventToProcessors(Event event){

@@ -13,27 +13,24 @@ public class RepartidorDeCarga {
         processingEvent = null;
     }
 
-    public void process(){
+    public void process(Double clock){
 
     }
 
-    public boolean addEvent(Event event){
+    public void addEvent(Event event){
         if (!isProcessingEvent()){
             processingEvent = event;
-            return true;
         }
         if (isSpaceInQueue()){
             queue.put(event);
-            return true;
         }
-        return false;
     }
 
-    private boolean isProcessingEvent(){
+    public boolean isProcessingEvent(){
         return processingEvent==null?false:true;
     }
 
-    private boolean isSpaceInQueue(){
+    public boolean isSpaceInQueue(){
         return !queue.isFull();
     }
 
