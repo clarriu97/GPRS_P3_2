@@ -6,7 +6,8 @@ public class System {
 
     private Agregador agregador1, agregador2;
     private Salida salida;
-    private CPD bloque1, bloque2, repartidorDeCarga;
+    private RepartidorDeCarga repartidorDeCarga;
+    private CPD bloque1, bloque2;
     private Double clock;
     private Separador separador;
 
@@ -16,7 +17,7 @@ public class System {
         agregador1 = new Agregador(premiumList, basicList);
         agregador2 = new Agregador();
 
-        repartidorDeCarga = new CPD(1, maxColaBloque0, tiempoServicioBloque0);
+        repartidorDeCarga = new RepartidorDeCarga(tiempoServicioBloque0, maxColaBloque0);
         bloque1 = new CPD(numServidoresCPD1, maxColaCPD1);
         bloque2 = new CPD(numServidoresCPD2, maxColaCPD2);
 

@@ -19,6 +19,15 @@ public class Salida {
 
     public void finishProcesing() {
         //TODO: make the output file with the events info
+
+        if (nombreArchivoSalida != null){
+            //Create the file with the name in nombreArchivoSalida
+
+        } else {
+            //Create the file with a name we choose
+
+        }
+
         for (Event event: listaSalidas){
             int acepted = 0;
             if (!event.isAcepted()){ acepted = 1;}
