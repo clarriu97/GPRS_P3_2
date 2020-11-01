@@ -33,10 +33,6 @@ public class Event implements Comparable<Event> {
         return tiempoServicio;
     }
 
-    public boolean isReentrada() {
-        return reentrada;
-    }
-
     @Override
     public int compareTo(Event event) {
         return Double.compare(tiempoLlegada, event.getTiempoLlegada());
@@ -58,5 +54,9 @@ public class Event implements Comparable<Event> {
     }
 
     public void setTiempoServicio(Double tiempoServicio){ this.tiempoServicio = tiempoServicio;}
+
+    public void setReentrada(boolean reentrada){this.reentrada = reentrada;}
+
+    public boolean isPremium(){ return premium;}
 
 }

@@ -16,9 +16,9 @@ public class System {
 
         agregador = new Agregador(premiumList, basicList);
 
-        repartidorDeCarga = new RepartidorDeCarga(tiempoServicioBloque0, maxColaBloque0);
         bloque1 = new CPD(numServidoresCPD1, maxColaCPD1);
         bloque2 = new CPD(numServidoresCPD2, maxColaCPD2);
+        repartidorDeCarga = new RepartidorDeCarga(tiempoServicioBloque0, maxColaBloque0, bloque1, bloque2);
 
         separador = new Separador(paramRetorno);
         salida = new Salida(nombreArchivoSalida);
@@ -39,15 +39,23 @@ public class System {
                 if (separador.checkRetorno()){
                     event1.setTiempoServicio(event1.getTiempoServicio()/2);
                     event1.setTiempoLlegada(clock);
+                    event1.setReentrada(true);
                     agregador.addEvent(event1);
-                } else { salida.add(event1);}
+                } else {
+                    event1.setAcepted(false);
+                    salida.add(event1);
+                }
             }
             if (event2 != null){
                 if (separador.checkRetorno()){
                     event2.setTiempoServicio(event2.getTiempoServicio()/2);
                     event2.setTiempoLlegada(clock);
                     agregador.addEvent(event2);
-                } else { salida.add(event2);}
+                    event2.setReentrada(true);
+                } else {
+                    event2.setAcepted(false);
+                    salida.add(event2);
+                }
             }
 
             //Here we check if an event has arrived, in that case we send it to the repartidorDeCarga if it is not full
@@ -61,6 +69,8 @@ public class System {
                 }
             }
 
+            //Here we check if an event is ready to go to one CPD, in that case we check if there is space in the respective CPD
+            //if it has no space we send the event to the Salida
             repartidorDeCarga.process(clock);
 
             clock += 0.000001;

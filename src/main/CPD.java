@@ -6,7 +6,6 @@ public class CPD {
 
     private Event[] processors;
     private SyncQueue queue;
-    private Double tiempoServicio;
 
     // Constructor
     public CPD(int numProcessors, int queueSize) {
@@ -119,4 +118,15 @@ public class CPD {
         return queue.isFull();
     }
 
+    public boolean checkSpace(){
+        return !queueIsFull()&&!processorsAreFull();
+    }
+
+    public void addEvent(Event event) {
+        if (!processorsAreFull()){
+            addEventToProcessors(event);
+        } else{
+            addEventToQueue(event);
+        }
+    }
 }
