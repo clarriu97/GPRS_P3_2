@@ -1,5 +1,8 @@
 package main;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +21,26 @@ public class Salida {
     }
 
     public void finishProcesing() {
-        //TODO: make the output file with the events info
 
-        if (nombreArchivoSalida != null){
-            //Create the file with the name in nombreArchivoSalida
+        if (nombreArchivoSalida == null){ nombreArchivoSalida = "archivoDeSalida.txt"; }
 
-        } else {
-            //Create the file with a name we choose
+        try {
+            File salida = new File(nombreArchivoSalida);
+            if (salida.createNewFile()){
+                FileWriter writer = new FileWriter(nombreArchivoSalida);
+                for (Event event: listaSalidas){
+                    writer.write(Double.toString(event.getTiempoLlegada()) + " ");
+                    if (event.isPremium()){ writer.write("premium");} else { writer.write("basico");}
+                    if (event.isReentrada()){ writer.write("1");} else { writer.write("0");}
+                    writer.write(Double.toString(event.getTiempoServicio()) + " " +
+                            Integer.toString(event.getCpd()) + " ");
+                    if (event.isAcepted()){ writer.write(0);} else {writer.write(1);}
+
+                }
+            } else {
+
+            }
+        } catch (IOException e){
 
         }
 

@@ -4,6 +4,7 @@ public class Event implements Comparable<Event> {
 
     private boolean premium, reentrada, acepted;
     private double tiempoLlegada, tiempoServicio, tiempoSalida;
+    private int cpd;
 
     public Event(boolean premium, double tiempoLlegada, double tiempoServicio) {
         this.premium = premium;
@@ -12,6 +13,7 @@ public class Event implements Comparable<Event> {
         reentrada = false;
         tiempoSalida = tiempoLlegada + tiempoServicio;
         acepted = true;
+        cpd = 0;
     }
 
     public void print(){
@@ -57,6 +59,11 @@ public class Event implements Comparable<Event> {
 
     public void setReentrada(boolean reentrada){this.reentrada = reentrada;}
 
+    public boolean isReentrada(){ return reentrada;}
+
     public boolean isPremium(){ return premium;}
 
+    public int getCpd() { return cpd; }
+
+    public void setCpd(int cpd) { this.cpd = cpd; }
 }

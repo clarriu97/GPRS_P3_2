@@ -72,6 +72,9 @@ public class System {
             //Here we check if an event is ready to go to one CPD, in that case we check if there is space in the respective CPD
             //if it has no space we send the event to the Salida
             repartidorDeCarga.process(clock);
+            if (repartidorDeCarga.eventToSalida()){
+                salida.add(repartidorDeCarga.getEventToSalida());
+            }
 
             clock += 0.000001;
         }
