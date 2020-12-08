@@ -34,7 +34,7 @@ public class System {
             event2 = bloque2.process(clock);
 
             //If an event goes out from bloque1 or bloque2, it will be not null, in that case we check if it
-            //goes in again to the system through agregador1, or it will go to the Salida
+            //goes in again to the system through agregador, or it will go to the Salida
             if (event1 != null){
                 if (separador.checkRetorno()){
                     event1.setTiempoServicio(event1.getTiempoServicio()/2);
@@ -42,7 +42,6 @@ public class System {
                     event1.setReentrada(true);
                     agregador.addEvent(event1);
                 } else {
-                    event1.setAcepted(false);
                     salida.add(event1);
                 }
             }
@@ -53,7 +52,6 @@ public class System {
                     agregador.addEvent(event2);
                     event2.setReentrada(true);
                 } else {
-                    event2.setAcepted(false);
                     salida.add(event2);
                 }
             }
@@ -65,6 +63,7 @@ public class System {
                 if (repartidorDeCarga.isSpaceInQueue() || !repartidorDeCarga.isProcessingEvent()){
                     repartidorDeCarga.addEvent(event);
                 } else {
+                	event.setAcepted(1);
                     salida.add(event);
                 }
             }
@@ -73,7 +72,9 @@ public class System {
             //if it has no space we send the event to the Salida
             repartidorDeCarga.process(clock);
             if (repartidorDeCarga.eventToSalida()){
-                salida.add(repartidorDeCarga.getEventToSalida());
+            	Event event = repartidorDeCarga.getEventToSalida();
+            	event.setAcepted(2);
+                salida.add(event);
             }
 
             clock += 0.000001;

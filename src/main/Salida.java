@@ -34,7 +34,7 @@ public class Salida {
                     if (event.isReentrada()){ writer.write("1");} else { writer.write("0");}
                     writer.write(Double.toString(event.getTiempoServicio()) + " " +
                             Integer.toString(event.getCpd()) + " ");
-                    if (event.isAcepted()){ writer.write(0);} else {writer.write(1);}
+                    writer.write(event.getAcepted());
 
                 }
             } else {
@@ -45,9 +45,7 @@ public class Salida {
         }
 
         for (Event event: listaSalidas){
-            int acepted = 0;
-            if (!event.isAcepted()){ acepted = 1;}
-            java.lang.System.out.println(event.getTiempoLlegada() + " " + event.getTiempoServicio() + " " + acepted);
+            java.lang.System.out.println(event.getTiempoLlegada() + " " + event.getTiempoServicio() + " " + event.getAcepted());
         }
     }
 }

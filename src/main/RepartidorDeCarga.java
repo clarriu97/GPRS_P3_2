@@ -81,7 +81,8 @@ public class RepartidorDeCarga {
         if (eventToSalida){
             eventToSalida = false;
             return true;
-        } else { return eventToSalida;}
+        }
+        return eventToSalida;
     }
 
     public Event getEventToSalida(){
