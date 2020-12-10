@@ -1,8 +1,6 @@
 package main;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,27 +25,39 @@ public class Salida {
         try {
             File salida = new File(nombreArchivoSalida);
             if (salida.createNewFile()){
-                FileWriter writer = new FileWriter(nombreArchivoSalida);
-                for (Event event: listaSalidas){
-                    writer.write(Double.toString(event.getTiempoLlegada()) + " ");
-                    if (event.isPremium()){ writer.write("premium");} else { writer.write("basico");}
-                    if (event.isReentrada()){ writer.write("1");} else { writer.write("0");}
-                    writer.write(Double.toString(event.getTiempoServicio()) + " " +
-                            Integer.toString(event.getCpd()) + " ");
-                    if (event.isAcepted()){ writer.write(0);} else {writer.write(1);}
-
-                }
+                writeToFile();
             } else {
-
+                salida.delete();
+                writeToFile();
             }
         } catch (IOException e){
-
+            e.printStackTrace();
         }
 
         for (Event event: listaSalidas){
-            int acepted = 0;
-            if (!event.isAcepted()){ acepted = 1;}
-            java.lang.System.out.println(event.getTiempoLlegada() + " " + event.getTiempoServicio() + " " + acepted);
+            java.lang.System.out.println(event.getTiempoLlegada() + " " + event.getTiempoServicio() + " " + event.getAcepted());
+        }
+    }
+
+    private void writeToFile(){
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(nombreArchivoSalida);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+
+            for (Event event: listaSalidas){
+                if (!event.isReentrada()){
+                    printWriter.printf(Double.toString(event.getTiempoLlegada()) + " ");
+                    if (event.isPremium()){ fileWriter.write("premium ");} else { fileWriter.write("basico ");}
+                    printWriter.printf("0 ");
+                    printWriter.printf(Double.toString(event.getTiempoServicio()) + " ");
+                    if (event.getCpd() == 0){ printWriter.printf("- "); } else {printWriter.printf(Integer.toString(event.getCpd()) + " ");}
+                    printWriter.printf(Integer.toString(event.getAcepted()) + "\n");
+                }
+            }
+            printWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

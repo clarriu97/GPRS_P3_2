@@ -22,38 +22,40 @@ public class RepartidorDeCarga {
         //if there is processing an event we check if it has passed the tiempoServicio, in that case
         //we send it to the respective CPD or to the Salida
         //in adition, if the queue is not empty, we start processing the first event
-        if (isProcessingEvent() && clock >= processingEvent.getTiempoLlegada()+tiempoServicio){
+        if (isProcessingEvent() && clock >= processingEvent.getTiempoSalida()){
 
             if (processingEvent.isPremium()){
                 if (bloque1.checkSpace()){
-                    processingEvent.setTiempoLlegada(clock);
+                    processingEvent.setTiempoSalida(clock + processingEvent.getTiempoServicio());
                     processingEvent.setCpd(1);
                     bloque1.addEvent(processingEvent);
                     processingEvent = null;
                 } else {
                     if (bloque2.checkSpace()){
-                        processingEvent.setTiempoLlegada(clock);
+                        processingEvent.setTiempoSalida(clock + processingEvent.getTiempoServicio());
                         processingEvent.setCpd(2);
                         bloque2.addEvent(processingEvent);
                         processingEvent = null;
                     } else {
+                        processingEvent.setAcepted(2);
                         eventToSalida = true;
                     }
                 }
             } else {
                 if (bloque2.checkSpace()){
-                    processingEvent.setTiempoLlegada(clock);
+                    processingEvent.setTiempoSalida(clock + processingEvent.getTiempoServicio());
                     processingEvent.setCpd(2);
                     bloque2.addEvent(processingEvent);
                     processingEvent = null;
                 } else {
+                    processingEvent.setAcepted(2);
                     eventToSalida = true;
                 }
             }
 
             if (!queue.isEmpty()){
                 processingEvent = queue.get();
-                processingEvent.setTiempoLlegada(clock);
+                processingEvent.setTiempoSalida(clock + tiempoServicio);
             }
         }
 
@@ -81,13 +83,18 @@ public class RepartidorDeCarga {
         if (eventToSalida){
             eventToSalida = false;
             return true;
-        } else { return eventToSalida;}
+        }
+        return eventToSalida;
     }
 
     public Event getEventToSalida(){
         Event event = processingEvent;
         processingEvent = null;
         return event;
+    }
+
+    public boolean isEmpty(){
+        return processingEvent == null && queue.isEmpty();
     }
 
 }

@@ -34,23 +34,21 @@ public class System {
             event2 = bloque2.process(clock);
 
             //If an event goes out from bloque1 or bloque2, it will be not null, in that case we check if it
-            //goes in again to the system through agregador1, or it will go to the Salida
+            //goes in again to the system through agregador, or it will go to the Salida
             if (event1 != null){
                 if (separador.checkRetorno()){
                     event1.setTiempoServicio(event1.getTiempoServicio()/2);
-                    event1.setTiempoLlegada(clock);
+                    event1.setTiempoSalida(clock + event1.getTiempoServicio());
                     event1.setReentrada(true);
-                    event1.setAcepted(0);
                     agregador.addEvent(event1);
                 } else {
-                    event1.setAcepted(2);
                     salida.add(event1);
                 }
             }
             if (event2 != null){
                 if (separador.checkRetorno()){
                     event2.setTiempoServicio(event2.getTiempoServicio()/2);
-                    event2.setTiempoLlegada(clock);
+                    event2.setTiempoSalida(clock + event2.getTiempoServicio());
                     agregador.addEvent(event2);
                     event2.setReentrada(true);
                 } else {
@@ -61,12 +59,13 @@ public class System {
 
             //Here we check if an event has arrived, in that case we send it to the repartidorDeCarga if it is not full
             //if it is full we sent it directly to the Salida
-            if (clock >= agregador.getInminentEvent(false).getTiempoLlegada()){
+            if (!agregador.isEmpty() && clock >= agregador.getInminentEvent(false).getTiempoLlegada()){
                 Event event = agregador.getInminentEvent(true);
                 if (repartidorDeCarga.isSpaceInQueue() || !repartidorDeCarga.isProcessingEvent()){
                     repartidorDeCarga.addEvent(event);
                 } else {
                     event.setAcepted(1);
+                	event.setAcepted(1);
                     salida.add(event);
                 }
             }
@@ -75,14 +74,23 @@ public class System {
             //if it has no space we send the event to the Salida
             repartidorDeCarga.process(clock);
             if (repartidorDeCarga.eventToSalida()){
-                salida.add(repartidorDeCarga.getEventToSalida());
+            	Event event = repartidorDeCarga.getEventToSalida();
+            	event.setAcepted(1);
+                salida.add(event);
             }
 
             clock += 0.000001;
         }
+        salida.finishProcesing();
     }
 
     private boolean notFinished(){
+        if (agregador.isEmpty() &&
+            repartidorDeCarga.isEmpty() &&
+            !bloque1.somethingToProcess() &&
+            !bloque2.somethingToProcess()){
+            return false;
+        }
         return true;
     }
 

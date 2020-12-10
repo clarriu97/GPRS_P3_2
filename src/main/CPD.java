@@ -24,27 +24,23 @@ public class CPD {
 
         //If an event in the processors has ended, we process that processor event
         for (int i = 0; i<processors.length; i++){
-            if (processors[i] != null){
-                if (clock >= processors[i].getTiempoSalida()){
-                    event = processProcessorEvent(processors[i], i);
-                }
+            if (processors[i] != null && clock >= processors[i].getTiempoSalida()){
+                event = processors[i];
+                processors[i] = null;
             }
         }
 
         //If there is an event in the queue, we check if there is an empty space in the processors
         //if there is a free processor, we process that queue event
-        if (!queue.isEmpty()){
-            if (!processorsAreFull()){
-                processQueueEvent(clock);
-            }
+        if (!queue.isEmpty() && !processorsAreFull()){
+            processQueueEvent(clock);
         }
 
         return event;
     }
 
     //Method for checking if there are any event to be processed in the hole system
-    private boolean somethingToProcess() {
-        //if (!fel.isEmpty()){ return true;}
+    public boolean somethingToProcess() {
         if (!queue.isEmpty()){ return true;}
         if (!processorsAreEmpty()){ return true;}
         return false;
@@ -59,16 +55,6 @@ public class CPD {
         Event event = queue.get();
         event.setTiempoSalida(clock + event.getTiempoServicio());
         processors[getFreeProcessor()] = event;
-    }
-
-
-    //Method to process an event whick is in the processors
-    //we only call this method if we know that an event from the processors has ended and
-    //we receive the position which will come up free, so we add that event to the Salida
-    //and we set the position as null
-    private Event processProcessorEvent(Event event, int freePos){
-        processors[freePos] = null;
-        return event;
     }
 
     //Method to check if ALL processors are empty

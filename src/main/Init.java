@@ -62,13 +62,13 @@ public class Init {
                         system = new System(premiumEventList, basicEventList, tiempoServicioBloque0, maxColaBloque0, numServidoresCPD1,
                                 maxColaCPD1, numServidoresCPD2, maxColaCPD2, parametroDeRetorno, fraseDividida[10]);
                     }
-                    //system.start();
+                    system.start();
                     //simula ficheroLlegadasPremium.txt ficheroLlegadasBasicos.txt 1 1 1 1 1 1 1
+                    //simula ficheroLlegadasPremium.txt ficheroLlegadasBasicos.txt 0.123564 0 10 5 10 5 0.1
                 } catch (NumberFormatException e){
                     showError();
                 }
-                for (Event event: premiumEventList){event.print();}
-                for (Event event: basicEventList){event.print();}
+
             } else {
                 showError();
             }
