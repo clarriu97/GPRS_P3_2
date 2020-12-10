@@ -40,9 +40,10 @@ public class System {
                     event1.setTiempoServicio(event1.getTiempoServicio()/2);
                     event1.setTiempoLlegada(clock);
                     event1.setReentrada(true);
+                    event1.setAcepted(0);
                     agregador.addEvent(event1);
                 } else {
-                    event1.setAcepted(false);
+                    event1.setAcepted(2);
                     salida.add(event1);
                 }
             }
@@ -53,7 +54,7 @@ public class System {
                     agregador.addEvent(event2);
                     event2.setReentrada(true);
                 } else {
-                    event2.setAcepted(false);
+                    event2.setAcepted(2);
                     salida.add(event2);
                 }
             }
@@ -65,6 +66,7 @@ public class System {
                 if (repartidorDeCarga.isSpaceInQueue() || !repartidorDeCarga.isProcessingEvent()){
                     repartidorDeCarga.addEvent(event);
                 } else {
+                    event.setAcepted(1);
                     salida.add(event);
                 }
             }

@@ -2,9 +2,9 @@ package main;
 
 public class Event implements Comparable<Event> {
 
-    private boolean premium, reentrada, acepted;
+    private boolean premium, reentrada;
     private double tiempoLlegada, tiempoServicio, tiempoSalida;
-    private int cpd;
+    private int cpd, acepted;
 
     public Event(boolean premium, double tiempoLlegada, double tiempoServicio) {
         this.premium = premium;
@@ -12,7 +12,7 @@ public class Event implements Comparable<Event> {
         this.tiempoServicio = tiempoServicio;
         reentrada = false;
         tiempoSalida = tiempoLlegada + tiempoServicio;
-        acepted = true;
+        acepted = -1;
         cpd = 0;
     }
 
@@ -40,11 +40,11 @@ public class Event implements Comparable<Event> {
         return Double.compare(tiempoLlegada, event.getTiempoLlegada());
     }
 
-    public void setAcepted(boolean acepted) {
+    public void setAcepted(int acepted) {
         this.acepted = acepted;
     }
 
-    public boolean isAcepted(){return acepted;}
+    public int getAcepted(){return acepted;}
 
     public void setTiempoLlegada(double tiempoLlegada) {
         this.tiempoLlegada = tiempoLlegada;

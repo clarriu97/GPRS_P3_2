@@ -8,10 +8,6 @@ public class Agregador {
 
     private List<Event> eventList;
 
-    public Agregador() {
-        eventList = new ArrayList<>();
-    }
-
     public Agregador(List<Event> premiumList, List<Event> basicosList){
         eventList = new ArrayList<>();
         for (Event event: premiumList){ eventList.add(event);}
